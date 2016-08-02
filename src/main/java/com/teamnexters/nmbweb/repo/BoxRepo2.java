@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * Created by limjuhyun on 8/2/16.
+ * Created by Jeon on 2016-08-02.
  */
-public interface BoxRepo extends JpaRepository<BoxEntity, String> {
-    List<BoxEntity> findByUseridAndShuserid(String userid, String shUserid);
+public interface BoxRepo2 extends JpaRepository<BoxEntity, String> {
+    BoxEntity findByUserid(String userid);
 }
-

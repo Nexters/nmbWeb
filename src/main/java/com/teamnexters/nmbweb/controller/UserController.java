@@ -25,6 +25,8 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public Map<String, Object> getUserData(@PathVariable String id) {
+
+
         Map<String, Object> mapResData = new HashMap<String, Object>();
         UserEntity userEntity = userRepo.findByUserid(id);
 
@@ -32,6 +34,25 @@ public class UserController {
             return JsonUtil.putFailJsonContainer("0001", "존재하지 않는 사용자입니다");
 
         mapResData.put("user", userEntity);
+
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
+
+    @RequestMapping(value="/{id}", method = RequestMethod.POST)
+    public Map<String, Object> saveUserData(@PathVariable String id) {
+
+
+        Map<String, Object> mapResData = new HashMap<String, Object>();
+        UserEntity userEntity = userRepo.findByUserid(id);
+
+        if(userEntity==null)
+            return JsonUtil.putFailJsonContainer("0001", "존재하지 않는 사용자입니다");
+
+        mapResData.put("user", userEntity);
+
+        userRepo.saveAndFlush((UserEntity)mapResData.get("user"));
+
+        return JsonUtil.putSuccessJsonContainer(mapResData);
+    }
+
 }
