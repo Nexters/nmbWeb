@@ -15,3 +15,7 @@ hs_err_pid*
 .idea/
 
 src/main/resources/application.properties
+build/
+out/
+src/main/resources/static/
+src/main/resources/templates/

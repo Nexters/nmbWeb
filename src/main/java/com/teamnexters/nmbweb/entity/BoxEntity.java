@@ -34,4 +34,7 @@ public class BoxEntity {
 
     @Column
     private int status;
+
+
+
 }

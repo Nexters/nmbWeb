@@ -26,6 +26,9 @@ public class UserLogin implements UserDetailsService {
     @Override
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepo.findByUserid(username);
+        if(userEntity==null)
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다");
+
         User user = new User(userEntity.getUserid(), userEntity.getPasswd(),getAuthorities(2));
         return user;
     }

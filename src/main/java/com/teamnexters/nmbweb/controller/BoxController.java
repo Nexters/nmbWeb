@@ -3,6 +3,7 @@ package com.teamnexters.nmbweb.controller;
 import com.teamnexters.nmbweb.entity.BoxEntity;
 
 import com.teamnexters.nmbweb.repo.BoxRepo;
+import com.teamnexters.nmbweb.util.CommUtil;
 import com.teamnexters.nmbweb.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,62 +23,36 @@ public class BoxController {
     @Autowired
     BoxRepo boxRepo;
 
-    BoxEntity boxEntity;
+    @RequestMapping(value="/{id}", method = RequestMethod.POST)
+    public Map<String, Object> write(@PathVariable int id
+                                    ,@RequestParam  Map<String, Object> mapReqData) {
+        Map<String, Object> mapResData = new HashMap<String, Object>();
+        BoxEntity boxEntity = new BoxEntity();
 
-    Map<String, Object> mapResData;
+        boxEntity.setBoxno(id);
+        boxEntity.setUserid((String)mapReqData.get("userid"));
+        boxEntity.setDate((Date)mapReqData.get("date"));
+        boxEntity.setLabel((String)mapReqData.get("label"));
+        boxEntity.setShuserid((String)mapReqData.get("shuserid"));
+        boxEntity.setContent((String)mapReqData.get("content"));
+        boxEntity.setStatus((int)mapReqData.get("status"));
 
-
-    @RequestMapping(name="/{id}", method = RequestMethod.POST)
-    public Map<String, Object> write(@PathVariable Map<String, Object> mapResData) {
-
-
-         mapResData= new HashMap<String, Object>();
-
-        boxEntity.setBoxno((int)mapResData.get("boxno"));
-        boxEntity.setUserid((String)mapResData.get("userid"));
-        boxEntity.setDate((Date)mapResData.get("date"));
-        boxEntity.setLabel((String)mapResData.get("label"));
-        boxEntity.setShuserid((String)mapResData.get("shuserid"));
-        boxEntity.setContent((String)mapResData.get("content"));
-        boxEntity.setStatus((int)mapResData.get("status"));
-
-
-        boxRepo.saveAndFlush(boxEntity);
+        mapResData.put("saved", boxRepo.saveAndFlush(boxEntity));
 
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
 
-
-
-     @RequestMapping(name="/{id}", method = RequestMethod.GET)
-    public Map<String, Object> findBoxByBothId(@PathVariable String id,@PathVariable String shUserid) {
-
-
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    public Map<String, Object> findBoxByBothId(@PathVariable int id) {
         Map<String, Object> mapResData = new HashMap<String, Object>();
-        List<BoxEntity> boxEntityList= boxRepo.findByUseridAndShuserid(id,shUserid);
-
-        mapResData.put("box", boxEntityList);
-
+        mapResData.put("box", boxRepo.findByBoxno(id));
         return JsonUtil.putSuccessJsonContainer(mapResData);
-
     }
 
-
-
-
-
-
-    /*///box/dasdsad/edit?data=dfdfdf
-    @RequestMapping(name="/{id}/edit", method = RequestMethod.POST)
-    public Map<String, Object> edit(@PathVariable("id") String idd
-                                    , @RequestParam("data") String data) {
+    @RequestMapping(value="/shared", method = RequestMethod.GET)
+    public Map<String, Object> getSharedBoxList() {
         Map<String, Object> mapResData = new HashMap<String, Object>();
-
-        return null;
-    }*/
-
-
-
-
-
+        mapResData.put("boxes", boxRepo.findByUseridAndShuseridIsNotNullOrderByDateDesc(CommUtil.getUserid()));
+        return JsonUtil.putSuccessJsonContainer(mapResData);
+    }
 }
