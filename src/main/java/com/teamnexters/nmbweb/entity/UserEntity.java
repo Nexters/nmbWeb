@@ -18,7 +18,7 @@ import java.util.Date;
 public class UserEntity {
     @Id
     @Column
-    private int userid;
+    private String userid;
 
     @Column
     private String passwd;

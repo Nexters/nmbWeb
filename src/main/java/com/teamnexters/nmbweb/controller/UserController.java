@@ -1,5 +1,6 @@
 package com.teamnexters.nmbweb.controller;
 
+import com.teamnexters.nmbweb.entity.UserEntity;
 import com.teamnexters.nmbweb.repo.BoxRepo;
 import com.teamnexters.nmbweb.repo.UserRepo;
 import com.teamnexters.nmbweb.util.JsonUtil;
@@ -22,11 +23,15 @@ public class UserController {
     @Autowired
     UserRepo userRepo;
 
-    @RequestMapping(name="/{id}", method = RequestMethod.POST)
-    public Map<String, Object> test(@PathVariable String id) {
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    public Map<String, Object> getUserData(@PathVariable String id) {
         Map<String, Object> mapResData = new HashMap<String, Object>();
-        mapResData.put("user", userRepo.findByUserid(id));
+        UserEntity userEntity = userRepo.findByUserid(id);
+
+        if(userEntity==null)
+            return JsonUtil.putFailJsonContainer("0001", "존재하지 않는 사용자입니다");
+
+        mapResData.put("user", userEntity);
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
-
 }
