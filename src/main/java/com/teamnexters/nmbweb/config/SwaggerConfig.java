@@ -16,10 +16,11 @@ public class SwaggerConfig {
     @Bean
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  
-          .select()                                  
+          .select()
           .apis(RequestHandlerSelectors.any())              
-          .paths(PathSelectors.any())                          
-          .build();                                           
+          .paths(PathSelectors.any())
+          .build()
+          .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
