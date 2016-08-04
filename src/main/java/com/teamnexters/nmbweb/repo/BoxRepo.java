@@ -12,10 +12,11 @@ import java.util.List;
 public interface BoxRepo extends JpaRepository<BoxEntity, String> {
     List<BoxEntity> findByUseridAndShuserid(String userid, String shUserid);
 
-    @PostAuthorize("returnObject.type == authentication.name")
+    @PostAuthorize("returnObject.userid == authentication.name")
     List<BoxEntity> findByUseridAndShuseridIsNotNullOrderByDateDesc(String userId);
 
-    @PostAuthorize ("returnObject.type == authentication.name")
+    //용도를 모르겠음.
+    @PostAuthorize ("returnObject.userid == authentication.name")
     BoxEntity findByBoxno(int boxno);
 }
 
