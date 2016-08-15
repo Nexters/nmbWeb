@@ -29,23 +29,16 @@ public class BoxController {
     BoxRepo boxRepo;
 
     @RequestMapping(value="/", method = RequestMethod.POST)
-    public Map<String, Object> write(@Valid @ModelAttribute BoxEntity paramBoxEntity) {
+    public Map<String, Object> UpdateAndSave(@Valid @ModelAttribute BoxEntity paramBoxEntity) {
         Map<String, Object> mapResData = new HashMap<String, Object>();
-        BoxEntity boxEntity = new BoxEntity();
-        String usrid = CommUtil.getUserid();
+        String strUsrId = CommUtil.getUserid();
 
-        if(usrid==null || "".equals(usrid))
+        if(strUsrId==null || "".equals(strUsrId))
             return JsonUtil.putFailJsonContainer("9999", "로그인 해주세요.");
 
-        boxEntity.setUserid(CommUtil.getUserid());
-        boxEntity.setDate(new Date());
-        boxEntity.setLabel(paramBoxEntity.getLabel());
-        boxEntity.setTitle(paramBoxEntity.getTitle());
-        boxEntity.setShuserid(paramBoxEntity.getShuserid());
-        boxEntity.setContent(paramBoxEntity.getContent());
-        boxEntity.setStatus(paramBoxEntity.getStatus());
-
-        mapResData.put("saved", boxRepo.saveAndFlush(boxEntity));
+        paramBoxEntity.setUserid(strUsrId);
+        paramBoxEntity.setDate(new Date());
+        mapResData.put("saved", boxRepo.saveAndFlush(paramBoxEntity));
 
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
@@ -57,29 +50,6 @@ public class BoxController {
         entity.setReadYN(1);
         boxRepo.saveAndFlush(entity);
         mapResData.put("box", entity);
-        return JsonUtil.putSuccessJsonContainer(mapResData);
-    }
-
-    @RequestMapping(value="/{boxno}/update", method = RequestMethod.POST)
-    public Map<String, Object> update(@Valid @ModelAttribute BoxEntity paramBoxEntity) {
-        Map<String, Object> mapResData = new HashMap<String, Object>();
-        BoxEntity boxEntity = new BoxEntity();
-        String usrid = CommUtil.getUserid();
-
-        if(usrid==null || "".equals(usrid))
-            return JsonUtil.putFailJsonContainer("9999", "로그인 해주세요.");
-
-        boxEntity.setBoxno(paramBoxEntity.getBoxno());
-        boxEntity.setUserid(CommUtil.getUserid());
-        boxEntity.setDate(new Date());
-        boxEntity.setLabel(paramBoxEntity.getLabel());
-        boxEntity.setTitle(paramBoxEntity.getTitle());
-        boxEntity.setShuserid(paramBoxEntity.getShuserid());
-        boxEntity.setContent(paramBoxEntity.getContent());
-        boxEntity.setStatus(paramBoxEntity.getStatus());
-
-        mapResData.put("updated", boxRepo.saveAndFlush(boxEntity));
-
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
 
