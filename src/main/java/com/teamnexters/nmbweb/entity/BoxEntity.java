@@ -30,10 +30,19 @@ public class BoxEntity {
     private String shuserid;
 
     @Column
+    private String title;
+
+    @Column
     private String content;
 
     @Column
     private int status;
+
+    @Column
+    private int readYN;
+
+    @Column
+    private Date targetDate;
 
 
 

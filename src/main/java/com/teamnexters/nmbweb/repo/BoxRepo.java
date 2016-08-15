@@ -1,6 +1,8 @@
 package com.teamnexters.nmbweb.repo;
 
 import com.teamnexters.nmbweb.entity.BoxEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 
@@ -12,8 +14,9 @@ import java.util.List;
 public interface BoxRepo extends JpaRepository<BoxEntity, String> {
     List<BoxEntity> findByUseridAndShuserid(String userid, String shUserid);
 
-    @PostAuthorize("returnObject.userid == authentication.name")
-    List<BoxEntity> findByUseridAndShuseridIsNotNullOrderByDateDesc(String userId);
+    Page<BoxEntity> findByUseridAndShuseridIsNotNull(String userId, Pageable pageable);
+
+    Page<BoxEntity> findByUserid(String userid, Pageable pageable);
 
     //용도를 모르겠음.
     @PostAuthorize ("returnObject.userid == authentication.name")

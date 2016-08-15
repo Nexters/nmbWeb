@@ -34,7 +34,9 @@ public class UserEntity {
     private String name;
 
     @Column
-    @NotNull
+    private int type;
+
+    @Column
     @Size(min=9,max=45,message = "폰 번호는 필수 요소입니다.")
     private String phone;
 

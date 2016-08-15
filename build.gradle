@@ -13,16 +13,29 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'idea'
 
 jar {
 	baseName = 'nmbweb'
 	version = '0.0.1-SNAPSHOT'
 }
+
+
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+}
+
+sourceSets {
+	generated {
+		java {
+			srcDirs = ['src/main/generated']
+		}
+	}
 }
 
 
@@ -32,14 +45,54 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.projectlombok:lombok')
+	compile('org.postgresql:postgresql:9.3-1100-jdbc4')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('io.springfox:springfox-swagger2:2.4.0')
 	compile('io.springfox:springfox-swagger-ui:2.4.0')
+	compile('com.mysema.querydsl:querydsl-jpa:3.6.9')
+	compile('com.mysema.querydsl:querydsl-apt:3.6.9')
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+
+task generateQueryDSL(type: JavaCompile, group: 'build') {
+	source = sourceSets.main.java
+	classpath = configurations.compile
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+	]
+	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+	dependsOn generateQueryDSL
+	source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+	dependsOn generateQueryDSL
+	options.warnings = false
+	classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+	delete sourceSets.generated.java.srcDirs
+}
+
+
+idea {
+	module {
+		sourceDirs += file('src/main/generated')
+	}
+}
+
+war {
+	baseName = 'ROOT'
+}
 
 eclipse {
 	classpath {

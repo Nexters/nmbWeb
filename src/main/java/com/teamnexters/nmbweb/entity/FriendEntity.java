@@ -1,6 +1,7 @@
 package com.teamnexters.nmbweb.entity;
 
 
+import com.teamnexters.nmbweb.entity.id.FriendIdClass;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,18 +12,15 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name="friend")
+@IdClass(FriendIdClass.class)
 public class FriendEntity {
 
-
+    @Id
     @Column
     private String userid;
 
+    @Id
     @Column
     private String friendid;
 
-    @Column
-    private int receivedmsgCnt;
-
-    @Column
-    private int sendmsgCnt;
 }
