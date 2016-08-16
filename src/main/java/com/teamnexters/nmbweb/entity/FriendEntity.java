@@ -23,4 +23,8 @@ public class FriendEntity {
     @Column
     private String friendid;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="userid", insertable=false, updatable=false)
+    private UserEntity user;
+
 }

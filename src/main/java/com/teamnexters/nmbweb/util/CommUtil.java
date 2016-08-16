@@ -13,7 +13,11 @@ public class CommUtil {
      * @return 로그인 중인 사용자의 이름(아이디)
      */
     public static String getUserid() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName();
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            return auth.getName();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -42,7 +42,7 @@ public class BoxEntity {
     private int readYN;
 
     @Column
-    private Date targetDate;
+    private String target;
 
 
 

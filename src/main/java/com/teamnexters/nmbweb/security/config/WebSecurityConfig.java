@@ -57,12 +57,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .disable()
                 .exceptionHandling()
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint());
-
-        http
-                .sessionManagement()
-                .sessionFixation()
-                .migrateSession()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false);
     }
 }

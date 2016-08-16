@@ -18,8 +18,8 @@ public interface BoxRepo extends JpaRepository<BoxEntity, String> {
 
     Page<BoxEntity> findByUserid(String userid, Pageable pageable);
 
-    //용도를 모르겠음.
-    @PostAuthorize ("returnObject.userid == authentication.name")
+    Page<BoxEntity> findByShuserid(String shuserid, Pageable pageable);
+
     BoxEntity findByBoxno(int boxno);
 }
 

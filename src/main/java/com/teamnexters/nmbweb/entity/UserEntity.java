@@ -4,13 +4,11 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -45,6 +43,10 @@ public class UserEntity {
 
     @Column
     private String rid;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="userid")
+    private List<FriendEntity> friend;
 
     public void setPasswd(String passwd) {
         ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
