@@ -4,6 +4,7 @@ import com.teamnexters.nmbweb.entity.UserEntity;
 import com.teamnexters.nmbweb.repo.BoxRepo;
 import com.teamnexters.nmbweb.repo.UserRepo;
 import com.teamnexters.nmbweb.util.JsonUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class UserController {
     @Autowired
     UserRepo userRepo;
 
+    @ApiOperation(value="유저 조회", notes="조회 시, 즐겨찾기 멤버도 가지고 온다")
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public Map<String, Object> getUserData(@PathVariable String id) {
         Map<String, Object> mapResData = new HashMap<String, Object>();
@@ -34,10 +36,19 @@ public class UserController {
     }
 
     @Secured({"ROLE_ANONYMOUS","IS_AUTHENTICATED_ANONYMOUSLY"})
+    @ApiOperation(value="유저 가입", notes = "유저가 존재하면 'user' 키 값에 사용자 정보를 넘겨줌")
     @RequestMapping(value="/", method = RequestMethod.POST)
     public Map<String, Object> saveUserData(@Valid @ModelAttribute UserEntity userEntity) {
+        UserEntity user = userRepo.findByUserid(userEntity.getUserid());
         Map<String, Object> mapResData = new HashMap<String, Object>();
-        mapResData.put("saved", userRepo.saveAndFlush(userEntity));
+
+        if(user!=null) {
+            user.setPasswd(null);
+            mapResData.put("user", user);
+        }  else {
+            mapResData.put("saved", userRepo.saveAndFlush(userEntity));
+
+        }
         return JsonUtil.putSuccessJsonContainer(mapResData);
     }
 

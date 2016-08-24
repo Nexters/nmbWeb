@@ -15,7 +15,12 @@ public class CommUtil {
     public static String getUserid() {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            return auth.getName();
+            String strUsrId = auth.getName();
+            if(!"anonymousUser".equals(strUsrId)) {
+                return auth.getName();
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }

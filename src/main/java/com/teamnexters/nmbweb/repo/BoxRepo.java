@@ -16,9 +16,11 @@ public interface BoxRepo extends JpaRepository<BoxEntity, String> {
 
     Page<BoxEntity> findByUseridAndShuseridIsNotNull(String userId, Pageable pageable);
 
+    Long countByShuseridAndReadYN(String shuserid, int readyn);
+
     Page<BoxEntity> findByUserid(String userid, Pageable pageable);
 
-    Page<BoxEntity> findByShuserid(String shuserid, Pageable pageable);
+    Page<BoxEntity> findByShuseridAndStatusGreaterThanEqual(String shuserid, int status, Pageable pageable);
 
     BoxEntity findByBoxno(int boxno);
 }

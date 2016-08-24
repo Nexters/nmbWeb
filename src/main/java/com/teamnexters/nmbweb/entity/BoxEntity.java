@@ -1,5 +1,6 @@
 package com.teamnexters.nmbweb.entity;
 
+import com.teamnexters.nmbweb.entity.id.BoxIdClass;
 import lombok.Data;
 
 import javax.persistence.*;
